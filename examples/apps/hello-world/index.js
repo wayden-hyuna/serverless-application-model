@@ -1,12 +1,26 @@
-'use strict';
+"use strict";
 
-console.log('Loading function');
+function verifyEncode(encoding) {
+  const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
+  return base64regex.test(encoding);
+}
 
-exports.handler = (event, context, callback) => {
-    //console.log('Received event:', JSON.stringify(event, null, 2));
-    console.log('value1 =', event.key1);
-    console.log('value2 =', event.key2);
-    console.log('value3 =', event.key3);
-    callback(null, event.key1);  // Echo back the first key value
-    //callback('Something went wrong');
+function buildResponse(statusCode, body) {
+  const response = {
+    statusCode,
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body
+  };
+  return response;
+}
+
+exports.handler = async (event, context) => {
+  const { domain_name, logo } = JSON.parse(event.body);
+
+  if (verifyEncode(logo)) {
+    return buildResponse(200, "working");
+  }
+  return buildResponse(400, "Bad Request");
 };
