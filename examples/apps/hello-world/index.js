@@ -5,6 +5,8 @@ function verifyEncode(encoding) {
   return base64regex.test(encoding);
 }
 
+
+
 function buildResponse(statusCode, body) {
   const response = {
     statusCode,
@@ -15,6 +17,8 @@ function buildResponse(statusCode, body) {
   };
   return response;
 }
+
+
 
 exports.handler = async (event, context) => {
   const { domain_name, logo } = JSON.parse(event.body);
